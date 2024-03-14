@@ -1,24 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import LoginPage from './components/LoginPage/index';
+import Homepage from './components/HomePage/index';
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [username, setUsername] = useState('');
+
+  const handleLogin = (user) => {
+    setUsername(user);
+    setLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    setUsername('');
+    setLoggedIn(false);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div>
+        <Switch>
+          <Route path="/" exact>
+            {!loggedIn ? (
+              <LoginPage onLogin={handleLogin} />
+            ) : (
+              <Homepage username={username} onLogout={handleLogout} />
+            )}
+          </Route>
+        </Switch>
+      </div>
+    </BrowserRouter>
   );
 }
 
